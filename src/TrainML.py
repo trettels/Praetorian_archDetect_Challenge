@@ -19,8 +19,6 @@ class myNN(torch.nn.Module):
 
         self.layer_stack = torch.nn.Sequential(
             torch.nn.Linear(input_size, hidden_size),
-           # torch.nn.ELU(alpha=0.95),
-           # torch.nn.Linear(hidden_size, hidden_size),
             torch.nn.ReLU(),
             torch.nn.Linear(hidden_size, output_size),
             torch.nn.ELU(alpha=1.25),
@@ -29,9 +27,6 @@ class myNN(torch.nn.Module):
     def forward(self, input):
         logits = self.layer_stack(input)
         return logits
-
-
-            
 
 def collect_snippets(base_dir, arch_dir):
     arch_path = base_dir + arch_dir + '/'
@@ -172,7 +167,6 @@ def main():
     train, validate, test = split_train_validate_test(arch_dict,0.4, 0.3)
     
     # initialize neural network: RNN, LSTM, or Clockwork-RNN?
-    #network = MyRNN(len(wordlist), num_hidden, len(list(arch_dict.keys()))).to("cuda")
     network = myNN(max_words, num_hidden, len(arch_list)).to(device)
     # Train network, plotting every plot_iter_modulo iterations
     current_loss = 0
