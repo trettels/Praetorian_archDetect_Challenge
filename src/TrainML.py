@@ -28,6 +28,26 @@ class myNN(torch.nn.Module):
         logits = self.layer_stack(input)
         return logits
 
+class myRNN():
+    def __init__():
+        super().__init__()
+        # RNN Modeul Neural network layers
+
+    def forward():
+        #step-wise computations per RNN module
+
+        return
+
+class CW_RNN():
+    def __init__():
+        super().__init__()
+        #Create ModuleCount number of RNN modules
+
+    def forward():
+        #Step-wise computations for the current set of modules, where module.phi_0 = phi_i
+
+        return
+
 def collect_snippets(base_dir, arch_dir):
     arch_path = base_dir + arch_dir + '/'
     snippet_list = list()
