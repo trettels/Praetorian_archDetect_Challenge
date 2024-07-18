@@ -25,20 +25,39 @@ class myNN(torch.nn.Module):
             torch.nn.Softmax(dim=0)
         )
     def forward(self, input):
-        logits = self.layer_stack(input)
-        return logits
+        output = self.layer_stack(input)
+        return output
+class rnnParams(torch.nn.ParameterDict):
+    def __init__(self, raw_param_dict, rnn_type='rnn'):
+        super().__init__()
+        # Make a parameter list with an additional text flag that indicates the type of RNN chosen
+        self.rnn_type = rnn_type
 
-class myRNN():
-    def __init__():
+        for key, val in raw_param_dict:
+            self.update({key: val})
+        # !!! Need to add defaults and checking for completeness based on rnn_type here !!!
+
+class myRNN(torch.nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers=1, bias=True, batch_first=False, dropout=0.0, bidirectional=False, rnn_type='rnn', nonlinearity='relu', proj_size=0):
         super().__init__()
         # RNN Modeul Neural network layers
-
-    def forward():
+        match rnn_type:
+            case 'rnn':
+                self.subnet = torch.nn.RNN(input_size, hidden_size, num_layers, nonlinearity, bias, batch_first, dropout, bidirectional)
+            case 'lstm':
+                self.subnet = torch.nn.LSTM(input_size, hidden_size, num_layers, bias, batch_first, dropout, bidirectional, proj_size)
+            case 'gru':
+                self.subnet = torch.nn.GRU(input_size, hidden_size, num_layers, bias, batch_first, dropout, bidirectional)
+    def forward(self, input, hidden_init):
         #step-wise computations per RNN module
+        try:
+            output, hidden_out =self.subnet(input, hidden_init)
+        except TypeError:
+            print('Type mismatch for hidden_init! if rnn_type is [lstm], hidden_init should be a tuple of tensors (h_0, c_0), else hidden init should be a tensor (h_0)')
+            return -1
+        return output, hidden_out
 
-        return
-
-class CW_RNN():
+class myCW_RNN(torch.nn.Module):
     def __init__():
         super().__init__()
         #Create ModuleCount number of RNN modules
